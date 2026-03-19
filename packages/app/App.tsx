@@ -1,7 +1,7 @@
-import React, {useEffect, useRef} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import React, { useEffect, useRef } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import RootNavigator from './src/navigators/RootNavigator';
-import {navigationRef} from './src/navigators/RootNavigation';
+import { navigationRef } from './src/navigators/RootNavigation';
 import analytics from '@react-native-firebase/analytics';
 import CodePush from 'react-native-code-push';
 import {
@@ -11,7 +11,7 @@ import {
   Text,
   Linking,
 } from 'react-native';
-import notifee, {AndroidImportance, EventType} from '@notifee/react-native';
+import notifee, { AndroidImportance, EventType } from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
 
 let backHandlerClickCount = 0;
@@ -37,12 +37,12 @@ const App = () => {
         body: remoteMessage.notification.body,
         data: remoteMessage.data,
         android: {
-          sound: "default",
+          sound: 'default',
           channelId: 'default',
           importance: AndroidImportance.HIGH,
         },
         ios: {
-          sound: "default",
+          sound: 'default',
           foregroundPresentationOptions: {
             badge: true,
             sound: true,
@@ -154,32 +154,33 @@ const App = () => {
         LMSNavigator: {
           initialRouteName: 'LMSScreen',
           screens: {
-            LMSScreen: 'lms'
-          }
-        }
+            LMSScreen: 'lms',
+          },
+        },
       },
     },
   };
 
   return (
-    <NavigationContainer 
+    <NavigationContainer
       ref={navigationRef}
-      linking={linking} 
+      linking={linking}
       onReady={() => {
         routeNameRef.current = navigationRef.current.getCurrentRoute().name;
       }}
       onStateChange={async () => {
-          const previousRouteName = routeNameRef.current;
-          const currentRouteName = navigationRef.current.getCurrentRoute().name;
+        const previousRouteName = routeNameRef.current;
+        const currentRouteName = navigationRef.current.getCurrentRoute().name;
 
-          if (previousRouteName !== currentRouteName) {
-            routeNameRef.current = currentRouteName;
-            await analytics().logScreenView({
-              screen_name: currentRouteName,
-              screen_class: currentRouteName,
-            });
-          }
-      }}>
+        if (previousRouteName !== currentRouteName) {
+          routeNameRef.current = currentRouteName;
+          await analytics().logScreenView({
+            screen_name: currentRouteName,
+            screen_class: currentRouteName,
+          });
+        }
+      }}
+    >
       <StatusBar barStyle={Platform.OS == 'ios' ? 'dark-content' : ''} />
       <RootNavigator />
     </NavigationContainer>
@@ -187,5 +188,5 @@ const App = () => {
 };
 
 export default CodePush({
-  checkFrequency: CodePush.CheckFrequency.MANUAL
+  checkFrequency: CodePush.CheckFrequency.MANUAL,
 })(App);
